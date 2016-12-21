@@ -9,7 +9,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.ipalma.rapreddit.RapRedditApplication;
+import com.ipalma.rapreddit.RRApplication;
 
 /**
  * Singleton class to maintain a single Volley Request Queue across the app for all the
@@ -27,7 +27,7 @@ public class VolleySingleton {
 
     private VolleySingleton() {
         // init request queue
-        Cache cache = new DiskBasedCache(RapRedditApplication.getAppContext().getCacheDir(), 10 * 1024 * 1024);
+        Cache cache = new DiskBasedCache(RRApplication.getAppContext().getCacheDir(), 10 * 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
