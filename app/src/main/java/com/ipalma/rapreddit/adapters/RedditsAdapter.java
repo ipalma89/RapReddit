@@ -1,11 +1,13 @@
 package com.ipalma.rapreddit.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ipalma.rapreddit.R;
+import com.ipalma.rapreddit.models.Reddit;
 import com.ipalma.rapreddit.viewholders.RedditViewHolder;
 
 import java.util.List;
@@ -17,10 +19,12 @@ import java.util.List;
 
 public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
 
-    private final List<String> titles;
+    private final Context context;
+    private final List<Reddit> reddits;
 
-    public RedditsAdapter(List<String> titles) {
-        this.titles = titles;
+    public RedditsAdapter(Context context, List<Reddit> reddits) {
+        this.context = context;
+        this.reddits = reddits;
     }
 
     @Override
@@ -33,11 +37,12 @@ public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
 
     @Override
     public void onBindViewHolder(RedditViewHolder holder, int position) {
-        holder.setTitle(titles.get(position));
+        Reddit reddit = reddits.get(position);
+        holder.bindRedditView(context, reddit.getTitle(), reddit.getIconImgUrl());
     }
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return reddits.size();
     }
 }

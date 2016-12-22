@@ -7,11 +7,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.ipalma.rapreddit.R;
 import com.ipalma.rapreddit.adapters.RedditsAdapter;
+import com.ipalma.rapreddit.models.Reddit;
+import com.ipalma.rapreddit.services.RedditService;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
 
     @Override
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeViews();
+        requestReddits();
     }
 
     private void initializeViews() {
@@ -27,6 +30,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new RedditsAdapter(Arrays.asList("sup1", "sup2", "sup3")));
+    }
+
+    private void requestReddits() {
+        RedditService.getReddits(TAG, new RedditService.RedditCallback() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Reddit> reddits) {
+                recyclerView.setAdapter(new RedditsAdapter(MainActivity.this, reddits));
+            }
+        });
     }
 }
