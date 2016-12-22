@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ipalma.rapreddit.R;
+import com.ipalma.rapreddit.models.Reddit;
 
 /**
  * View Holder for the reddits recycler view
@@ -26,10 +27,10 @@ public class RedditViewHolder extends RecyclerView.ViewHolder {
         iconImageView = (ImageView) itemView.findViewById(R.id.icon_img);
     }
 
-    public void bindRedditView(Context context, String title, String imgUrl) {
-        titleTextView.setText(title);
+    public void bindRedditView(Context context, Reddit reddit) {
+        titleTextView.setText(reddit.getTitle());
         Glide.with(context)
-                .load(imgUrl)
+                .load(reddit.getIconImgUrl())
                 .dontAnimate()
                 .placeholder(R.drawable.placeholder)
                 .into(iconImageView);

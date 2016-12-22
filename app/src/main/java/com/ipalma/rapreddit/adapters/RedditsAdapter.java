@@ -37,8 +37,7 @@ public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
 
     @Override
     public void onBindViewHolder(RedditViewHolder holder, int position) {
-        Reddit reddit = reddits.get(position);
-        holder.bindRedditView(context, reddit.getTitle(), reddit.getIconImgUrl());
+        holder.bindRedditView(context, reddits.get(position));
     }
 
     @Override
