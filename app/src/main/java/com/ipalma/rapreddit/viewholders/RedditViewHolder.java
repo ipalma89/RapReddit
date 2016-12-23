@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ipalma.rapreddit.R;
+import com.ipalma.rapreddit.helpers.DataUtils;
 import com.ipalma.rapreddit.models.Reddit;
 
 /**
@@ -17,18 +18,33 @@ import com.ipalma.rapreddit.models.Reddit;
 
 public class RedditViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView titleTextView;
     private ImageView iconImageView;
+    private TextView urlTextView;
+    private TextView publicDescTextView;
+    private TextView subscribersTextView;
 
     public RedditViewHolder(View itemView) {
         super(itemView);
 
-        titleTextView = (TextView) itemView.findViewById(R.id.title);
         iconImageView = (ImageView) itemView.findViewById(R.id.icon_img);
+        urlTextView = (TextView) itemView.findViewById(R.id.url);
+        publicDescTextView = (TextView) itemView.findViewById(R.id.publicDescription);
+        subscribersTextView = (TextView) itemView.findViewById(R.id.subscribers);
     }
 
     public void bindRedditView(Context context, Reddit reddit) {
-        titleTextView.setText(reddit.getTitle());
+        // Set top text view (url + date)
+        String date = DataUtils.getFormattedDate(reddit.getCreated());
+        urlTextView.setText(context.getString(R.string.row_url_time, reddit.getUrl(), date));
+
+        // Set description
+        publicDescTextView.setText(reddit.getPublicDesc());
+
+        // Set bottom text view (subscribers)
+        String subs = DataUtils.getFormattedNumber(reddit.getSubscribers());
+        subscribersTextView.setText(context.getString(R.string.subscribers, subs));
+
+        // Use image library to load image
         Glide.with(context)
                 .load(reddit.getIconImgUrl())
                 .dontAnimate()

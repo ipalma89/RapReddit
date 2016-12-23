@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.ipalma.rapreddit.R;
 import com.ipalma.rapreddit.adapters.RedditsAdapter;
 import com.ipalma.rapreddit.models.Reddit;
+import com.ipalma.rapreddit.network.VolleySingleton;
 import com.ipalma.rapreddit.services.RedditService;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
 
         initializeViews();
         requestReddits();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        VolleySingleton.getInstance().cancelRequestsFor(TAG);
     }
 
     private void initializeViews() {

@@ -7,13 +7,14 @@ public class Reddit {
     private String id;
     @SerializedName("display_name") private String displayName;
     private String title;
+    private String url;
     @SerializedName("icon_img") private String iconImgUrl;
     @SerializedName("banner_img") private String bannerImgUrl;
     @SerializedName("header_img") private String headerImgUrl;
     @SerializedName("public_description_html") private String publicDescHtml;
     @SerializedName("public_description") private String publicDesc;
-    private int subscribers;
-    private int created;
+    private long subscribers;
+    private long created;
 
     public String getId() {
         return id;
@@ -25,6 +26,10 @@ public class Reddit {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getIconImgUrl() {
@@ -47,11 +52,11 @@ public class Reddit {
         return publicDesc;
     }
 
-    public int getSubscribers() {
+    public long getSubscribers() {
         return subscribers;
     }
 
-    public int getCreated() {
+    public long getCreated() {
         return created;
     }
 }

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">RapReddit</string>
+    <string name="description">description</string>
+    <string name="row_url_time">%1$s \u2022 %2$s</string>
+    <string name="subscribers">%1$s subscribers</string>
 </resources>
