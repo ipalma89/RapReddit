@@ -1,11 +1,14 @@
 package com.ipalma.rapreddit.services;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.ipalma.rapreddit.R;
+import com.ipalma.rapreddit.helpers.DataUtils;
 import com.ipalma.rapreddit.helpers.RedditDeserializer;
 import com.ipalma.rapreddit.models.Reddit;
 import com.ipalma.rapreddit.network.VolleySingleton;
@@ -39,7 +42,15 @@ public class RedditService {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.onError(error.toString());
+                        String message;
+
+                        if (error instanceof NoConnectionError) {
+                            message = DataUtils.getString(R.string.no_network_error);
+                        } else {
+                            message = DataUtils.getString(R.string.generic_error);
+                        }
+
+                        listener.onError(message);
                     }
         });
 

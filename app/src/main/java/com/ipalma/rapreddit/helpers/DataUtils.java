@@ -1,5 +1,7 @@
 package com.ipalma.rapreddit.helpers;
 
+import com.ipalma.rapreddit.RRApplication;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,5 +31,9 @@ public class DataUtils {
      */
     public static String getFormattedNumber(long number) {
         return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
+    }
+
+    public static String getString(int resId) {
+        return RRApplication.getAppContext().getString(resId);
     }
 }

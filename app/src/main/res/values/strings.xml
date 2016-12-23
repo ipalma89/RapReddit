@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">RapReddit</string>
+    <string name="generic_error">Error detected. Please retry.</string>
+    <string name="no_network_error">No internet connection.</string>
+    <string name="empty_list">No items to show</string>
+    <string name="retry">Retry</string>
     <string name="description">description</string>
     <string name="row_url_time">%1$s \u2022 %2$s</string>
     <string name="subscribers">%1$s subscribers</string>
