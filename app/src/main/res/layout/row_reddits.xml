@@ -15,7 +15,6 @@
             android:layout_height="70dp"
             android:scaleType="fitXY"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/placeholder"
             android:layout_marginRight="10dp"/>
 
         <TextView

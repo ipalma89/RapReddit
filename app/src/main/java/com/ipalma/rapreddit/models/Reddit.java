@@ -18,6 +18,8 @@ public class Reddit implements Parcelable {
     @SerializedName("public_description") private String publicDesc;
     private long subscribers;
     private long created;
+    @SerializedName("banner_size") private int[] bannerImgSize;
+    @SerializedName("description") private String description;
 
     public String getId() {
         return id;
@@ -63,6 +65,17 @@ public class Reddit implements Parcelable {
         return created;
     }
 
+    public int[] getBannerImgSize() {
+        if (bannerImgSize == null) {
+            bannerImgSize = new int[]{1280, 384};
+        }
+
+        return bannerImgSize;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     @Override
     public int describeContents() {
@@ -82,6 +95,8 @@ public class Reddit implements Parcelable {
         dest.writeString(publicDesc);
         dest.writeLong(subscribers);
         dest.writeLong(created);
+        dest.writeIntArray(getBannerImgSize());
+        dest.writeString(description);
     }
 
     private Reddit(Parcel parcel) {
@@ -96,10 +111,11 @@ public class Reddit implements Parcelable {
         publicDesc = parcel.readString();
         subscribers = parcel.readLong();
         created = parcel.readLong();
+        bannerImgSize = parcel.createIntArray();
+        description = parcel.readString();
     }
 
     public static final Parcelable.Creator<Reddit> CREATOR = new Parcelable.Creator<Reddit>() {
-
         @Override
         public Reddit createFromParcel(Parcel source) {
             return new Reddit(source);

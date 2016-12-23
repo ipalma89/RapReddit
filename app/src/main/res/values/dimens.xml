@@ -2,4 +2,12 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="reddit_details_circle_size">80dp</dimen>
+    <dimen name="reddit_details_circle_translation">40dp</dimen>
+    <dimen name="reddit_details_circle_margin">50dp</dimen>
+    <dimen name="reddit_details_title_size">20sp</dimen>
+    <dimen name="reddit_details_subscribers_margin">10dp</dimen>
+    <dimen name="reddit_details_subscribers_size">12sp</dimen>
+    <dimen name="reddit_details_separator_margin">5dp</dimen>
 </resources>
