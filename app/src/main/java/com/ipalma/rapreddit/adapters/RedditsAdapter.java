@@ -32,7 +32,7 @@ public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_reddits, parent, false);
 
-        return new RedditViewHolder(itemView);
+        return new RedditViewHolder(context, itemView);
     }
 
     @Override

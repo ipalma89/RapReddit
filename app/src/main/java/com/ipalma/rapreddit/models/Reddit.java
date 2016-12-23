@@ -1,8 +1,11 @@
 package com.ipalma.rapreddit.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Reddit {
+public class Reddit implements Parcelable {
 
     private String id;
     @SerializedName("display_name") private String displayName;
@@ -59,4 +62,52 @@ public class Reddit {
     public long getCreated() {
         return created;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(displayName);
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeString(iconImgUrl);
+        dest.writeString(bannerImgUrl);
+        dest.writeString(headerImgUrl);
+        dest.writeString(publicDescHtml);
+        dest.writeString(publicDesc);
+        dest.writeLong(subscribers);
+        dest.writeLong(created);
+    }
+
+    private Reddit(Parcel parcel) {
+        id = parcel.readString();
+        displayName = parcel.readString();
+        title = parcel.readString();
+        url = parcel.readString();
+        iconImgUrl = parcel.readString();
+        bannerImgUrl = parcel.readString();
+        headerImgUrl = parcel.readString();
+        publicDescHtml = parcel.readString();
+        publicDesc = parcel.readString();
+        subscribers = parcel.readLong();
+        created = parcel.readLong();
+    }
+
+    public static final Parcelable.Creator<Reddit> CREATOR = new Parcelable.Creator<Reddit>() {
+
+        @Override
+        public Reddit createFromParcel(Parcel source) {
+            return new Reddit(source);
+        }
+
+        @Override
+        public Reddit[] newArray(int size) {
+            return new Reddit[size];
+        }
+    };
 }
