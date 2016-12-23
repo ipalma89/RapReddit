@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ipalma.rapreddit.R;
 import com.ipalma.rapreddit.helpers.DataUtils;
 import com.ipalma.rapreddit.helpers.RedditDeserializer;
+import com.ipalma.rapreddit.helpers.SharedPreferencesHelper;
 import com.ipalma.rapreddit.models.Reddit;
 import com.ipalma.rapreddit.network.VolleySingleton;
 
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class RedditService {
     private static final String URL_REDDITS = "https://www.reddit.com/reddits.json";
+    private static final String REDDITS_CACHE_KEY = "reddits_cache";
 
     public static void getReddits(String requestTag, final RedditCallback listener) {
 
@@ -34,6 +36,9 @@ public class RedditService {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            // cache last request for offline mode
+                            SharedPreferencesHelper.savePreference(REDDITS_CACHE_KEY, response.toString());
+
                             listener.onSuccess(parseRedditsJson(response));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -45,7 +50,17 @@ public class RedditService {
                         String message;
 
                         if (error instanceof NoConnectionError) {
-                            message = DataUtils.getString(R.string.no_network_error);
+                            // when no connection we try to get from cache
+                            List<Reddit> reddits = getRedditsFromCache();
+
+                            if (reddits != null) {
+                                // we have data cached
+                                listener.onSuccess(reddits);
+                                return;
+                            } else {
+                                // no connection and no data cached
+                                message = DataUtils.getString(R.string.no_network_error);
+                            }
                         } else {
                             message = DataUtils.getString(R.string.generic_error);
                         }
@@ -67,6 +82,16 @@ public class RedditService {
                 .create();
 
         return gson.fromJson(reddits, listType);
+    }
+
+    private static List<Reddit> getRedditsFromCache() {
+        String reddits = SharedPreferencesHelper.getStringPreference(REDDITS_CACHE_KEY);
+
+        try {
+            return parseRedditsJson(new JSONObject(reddits));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public interface RedditCallback {
