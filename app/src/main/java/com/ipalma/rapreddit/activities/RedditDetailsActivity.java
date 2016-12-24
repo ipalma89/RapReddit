@@ -111,14 +111,14 @@ public class RedditDetailsActivity extends AppCompatActivity {
         int width = reddit.getBannerImgSize()[0];
         int height = reddit.getBannerImgSize()[1];
 
-        return imageViewWidth/(width/height);
+        return (int)(imageViewWidth/((float)width/(float)height));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
+
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
