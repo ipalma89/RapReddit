@@ -19,7 +19,7 @@ public class Reddit implements Parcelable {
     private long subscribers;
     private long created;
     @SerializedName("banner_size") private int[] bannerImgSize;
-    @SerializedName("description") private String description;
+    @SerializedName("description_html") private String description;
 
     public String getId() {
         return id;

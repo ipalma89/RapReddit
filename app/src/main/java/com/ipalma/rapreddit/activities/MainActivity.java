@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         emptyView = findViewById(R.id.empty_view);
         emptyViewText = (TextView) findViewById(R.id.empty_view_text);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);

@@ -2,10 +2,15 @@ package com.ipalma.rapreddit.activities;
 
 import android.graphics.Point;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,10 +24,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RedditDetailsActivity extends AppCompatActivity {
 
     private Reddit reddit;
-    private TextView titleTextView, subscribersTextView, descriptionTextView;
+    private TextView titleTextView, subscribersTextView;
     private ImageView banner;
     private CircleImageView circleImage;
     private CollapsingToolbarLayout collapsingToolbar;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +36,33 @@ public class RedditDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reddit_details);
 
         reddit = getIntent().getParcelableExtra("reddit");
+        setToolbar();
+        initializeViews();
+    }
+
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initializeViews() {
         titleTextView = (TextView) findViewById(R.id.title);
         banner = (ImageView) findViewById(R.id.banner_image);
         circleImage = (CircleImageView) findViewById(R.id.circle_image);
         subscribersTextView = (TextView) findViewById(R.id.subscribers);
         subscribersTextView = (TextView) findViewById(R.id.subscribers);
-        descriptionTextView = (TextView) findViewById(R.id.description);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        webView = (WebView) findViewById(R.id.webview);
 
+        // set header title
         titleTextView.setText(reddit.getUrl());
 
         // set image view size to maintain aspect ratio
-        int width = getWidth();
-        int height = getHeight(width);
-        ViewGroup.LayoutParams layoutParams = banner.getLayoutParams();
-        layoutParams.width = width;
-        layoutParams.height = height;
-        banner.setLayoutParams(layoutParams);
+        setBannerImageViewSize();
 
         // load banner
         Glide.with(this)
@@ -68,9 +84,19 @@ public class RedditDetailsActivity extends AppCompatActivity {
         subscribersTextView.setText(getString(R.string.subscribers, subs));
 
         // set description
-        descriptionTextView.setText(reddit.getDescription());
+        webView.loadData(Html.fromHtml(reddit.getDescription()).toString(),"text/html","utf-8");
 
-        collapsingToolbar.setTitle("ASD");
+        collapsingToolbar.setTitle(reddit.getDisplayName());
+        collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
+    }
+
+    private void setBannerImageViewSize() {
+        int width = getWidth();
+        int height = getHeight(width);
+        ViewGroup.LayoutParams layoutParams = banner.getLayoutParams();
+        layoutParams.width = width;
+        layoutParams.height = height;
+        banner.setLayoutParams(layoutParams);
     }
 
     private int getWidth() {
@@ -81,7 +107,20 @@ public class RedditDetailsActivity extends AppCompatActivity {
         return size.x;
     }
 
-    private int getHeight(int width) {
-        return width/(1280/384);
+    private int getHeight(int imageViewWidth) {
+        int width = reddit.getBannerImgSize()[0];
+        int height = reddit.getBannerImgSize()[1];
+
+        return imageViewWidth/(width/height);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
