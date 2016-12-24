@@ -10,7 +10,7 @@ import com.ipalma.rapreddit.R;
 import com.ipalma.rapreddit.models.Reddit;
 import com.ipalma.rapreddit.viewholders.RedditViewHolder;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Adapter for the reddits recycler view
@@ -20,9 +20,9 @@ import java.util.List;
 public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
 
     private final Context context;
-    private final List<Reddit> reddits;
+    private final ArrayList<Reddit> reddits;
 
-    public RedditsAdapter(Context context, List<Reddit> reddits) {
+    public RedditsAdapter(Context context, ArrayList<Reddit> reddits) {
         this.context = context;
         this.reddits = reddits;
     }
@@ -43,5 +43,9 @@ public class RedditsAdapter extends RecyclerView.Adapter<RedditViewHolder> {
     @Override
     public int getItemCount() {
         return reddits.size();
+    }
+
+    public ArrayList<Reddit> getReddits() {
+        return reddits;
     }
 }

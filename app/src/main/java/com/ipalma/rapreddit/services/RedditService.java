@@ -18,7 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -51,7 +51,7 @@ public class RedditService {
 
                         if (error instanceof NoConnectionError) {
                             // when no connection we try to get from cache
-                            List<Reddit> reddits = getRedditsFromCache();
+                            ArrayList<Reddit> reddits = getRedditsFromCache();
 
                             if (reddits != null) {
                                 // we have data cached
@@ -73,8 +73,8 @@ public class RedditService {
         VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
-    private static List<Reddit> parseRedditsJson(JSONObject response) throws JSONException {
-        Type listType = new TypeToken<List<Reddit>>() {}.getType();
+    private static ArrayList<Reddit> parseRedditsJson(JSONObject response) throws JSONException {
+        Type listType = new TypeToken<ArrayList<Reddit>>() {}.getType();
         String reddits =  response.getJSONObject("data").getString("children");
 
         Gson gson = new GsonBuilder()
@@ -84,7 +84,7 @@ public class RedditService {
         return gson.fromJson(reddits, listType);
     }
 
-    private static List<Reddit> getRedditsFromCache() {
+    private static ArrayList<Reddit> getRedditsFromCache() {
         String reddits = SharedPreferencesHelper.getStringPreference(REDDITS_CACHE_KEY);
 
         try {
@@ -96,6 +96,6 @@ public class RedditService {
 
     public interface RedditCallback {
         void onError(String message);
-        void onSuccess(List<Reddit> reddits);
+        void onSuccess(ArrayList<Reddit> reddits);
     }
 }

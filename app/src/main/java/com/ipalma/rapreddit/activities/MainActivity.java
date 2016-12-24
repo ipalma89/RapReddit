@@ -16,16 +16,18 @@ import com.ipalma.rapreddit.models.Reddit;
 import com.ipalma.rapreddit.network.VolleySingleton;
 import com.ipalma.rapreddit.services.RedditService;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final String KEY_PARCEL_REDDITS = "reddits_parcel_key";
 
     private View emptyView;
     private TextView emptyViewText;
     private Button retryBtn;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
+    private RedditsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeViews();
-        requestReddits();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        if (adapter == null) {
+            requestReddits();
+        } else {
+            setLoading(false);
+        }
     }
 
     @Override
@@ -70,29 +82,53 @@ public class MainActivity extends AppCompatActivity {
         RedditService.getReddits(TAG, new RedditService.RedditCallback() {
             @Override
             public void onError(String message) {
-                setLoading(false);
-                recyclerView.setVisibility(View.GONE);
                 emptyViewText.setText(message);
+                setLoading(false);
             }
 
             @Override
-            public void onSuccess(List<Reddit> reddits) {
-                setLoading(false);
-
+            public void onSuccess(ArrayList<Reddit> reddits) {
                 if (reddits.size() > 0) {
-                    emptyView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView.setAdapter(new RedditsAdapter(MainActivity.this, reddits));
+                    adapter = new RedditsAdapter(MainActivity.this, reddits);
+                    recyclerView.setAdapter(adapter);
                 } else {
-                    recyclerView.setVisibility(View.GONE);
                     emptyViewText.setText(R.string.empty_list);
                 }
+                setLoading(false);
             }
         });
     }
 
     private void setLoading(boolean isLoading) {
+        // set loading state
         progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        emptyView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+
+        // also check the content views state
+        boolean haveItems = adapter != null;
+        emptyView.setVisibility(isLoading || haveItems ? View.GONE : View.VISIBLE);
+        recyclerView.setVisibility(isLoading || !haveItems ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // save state of items list so we don't request them again when screen is rotated
+        if (adapter != null) {
+            outState.putParcelableArrayList(KEY_PARCEL_REDDITS, adapter.getReddits());
+        }
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // restore saved items
+        ArrayList<Reddit> reddits = savedInstanceState.getParcelableArrayList(KEY_PARCEL_REDDITS);
+        if (reddits != null) {
+            adapter = new RedditsAdapter(MainActivity.this, reddits);
+            recyclerView.setAdapter(adapter);
+        }
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }
